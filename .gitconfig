@@ -1,0 +1,2 @@
+[alias]
+  log1 = log --pretty=oneline --abbrev-commit
