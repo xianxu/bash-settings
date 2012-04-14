@@ -83,12 +83,12 @@ tunnel() {
 
 function vv() {
   e=${@/:/ +}
-  /Applications/MacVim.app/Contents/MacOS/Vim -R -c "set number" $e
+  /Applications/MacVim.app/Contents/MacOS/Vim -R -c "set number" "$e"
 }
 
 function v() {
   e=${@/:/ +}
-  /Applications/MacVim.app/Contents/MacOS/Vim -c "set number" $e
+  /Applications/MacVim.app/Contents/MacOS/Vim -c "set number" "$e"
 }
 
 alias http='python -m SimpleHTTPServer'
