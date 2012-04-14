@@ -70,14 +70,15 @@ git_or_hg() {
 export PS1="\[$txtblu\][\[$undblu\]\w\[$txtred\] \$(git_or_hg)\[$txtblu\]] \[$txtrst\][\A]\n[\u@\h] \$ "
 
 # tunnel to a machine. 
-# usage: tunnel host:port
+# usage: tunnel bridge host:port
 tunnel() {
-  host=${1%%:*}
-  port=${1#*:}
-  delta=${2:-0}
+  via=$1
+  host=${2%%:*}
+  port=${2#*:}
+  delta=${3:-0}
   let "lport=$port+$delta"
-  echo ssh -L $lport:$host:$port $host
-  ssh -L $lport:$host:$port $host
+  echo ssh -L $lport:$host:$port $via
+  ssh -L $lport:$host:$port $via
 }
 
 function vv() {
@@ -117,7 +118,7 @@ alias pjson='python -mjson.tool'
 
 # source search
 ffd() {
-  ff "(module|class|trait|object|def|val|var|type|def self\.)[ \t]+$1"
+  ff "(public|private|protected|module|class|trait|object|def|val|var|type|def self\.)[ \t]+$1"
 }
 
 ff() {
@@ -127,32 +128,56 @@ ff() {
   rm -f .foundfiles
 }
 
+f() {
+  git grep --color=always -n -E "$*"
+}
+
 g() {
   GREP_COLOR='1;32' grep --color=always "$*" | less -R
 }
 
-g--() {
-  GREP_COLOR='1;32' grep --color=always -v -E "test|spec"  | less -R
+h() {
+  GREP_COLOR='1;33' grep --color=always "$*" | less -R
+}
+
+i() {
+  GREP_COLOR='1;34' grep --color=always "$*" | less -R
+}
+
+j() {
+  GREP_COLOR='1;35' grep --color=always "$*" | less -R
 }
 
 g-() {
   GREP_COLOR='1;32' grep --color=always -v "$*" | less -R
 }
 
-G() {
-  GREP_COLOR='1;32' grep --color=always -i "$*" | less -R
-}
-
-f() {
-  git grep --color=always -n -E "$*"
-}
-
 F() {
   git grep --color=always -n -E -i "$*"
 }
 
+G() {
+  GREP_COLOR='1;32' grep --color=always -i "$*" | less -R
+}
+
+H() {
+  GREP_COLOR='1;33' grep --color=always -i "$*" | less -R
+}
+
+I() {
+  GREP_COLOR='1;34' grep --color=always -i "$*" | less -R
+}
+
+J() {
+  GREP_COLOR='1;35' grep --color=always -i "$*" | less -R
+}
+
+G-() {
+  GREP_COLOR='1;32' grep --color=always -v -i "$*" | less -R
+}
+
 fd() {
-  git grep --color=always -n -E "(module|class|trait|object|def|val|var|type|def self\.)[ \t]+$*"
+  git grep --color=always -n -E "(public|private|protected|module|class|trait|object|def|val|var|type|def self\.)[ \t]+$*"
 }
 
 # ramdisk
