@@ -69,14 +69,34 @@ git_or_hg() {
 }
 export PS1="\[$txtblu\][\[$undblu\]\w\[$txtred\] \$(git_or_hg)\[$txtblu\]] \[$txtrst\][\A]\n[\u@\h] \$ "
 
-# tunnel to a machine. 
-# usage: tunnel bridge host:port
+# tunnel to a machine.
+# usage:
+#   tunnel host:port
+#   tunnel host:port bridge
+#   tunnel host:port lport
+#   tunnel host:port lport bridge
 tunnel() {
-  via=$1
-  host=${2%%:*}
-  port=${2#*:}
-  delta=${3:-0}
-  let "lport=$port+$delta"
+  host=${1%%:*}
+  port=${1#*:}
+  lport=$2
+  via=$3
+  if [ "x$host" = "x" ]; then
+    echo "Create ssh tunnel to a machine."
+    echo "Usage:"
+    echo "  tunnel host:port"
+    echo "  tunnel host:port bridge"
+    echo "  tunnel host:port lport"
+    echo "  tunnel host:port lport bridge"
+    return
+  # if lport is not set
+  elif [ "x$lport" = "x" ]; then
+    lport=$port
+    via=$host
+  elif ! [[ "$lport" =~ ^[0-9]+$ ]]; then
+    via=$lport
+    lport=$port
+  fi
+
   echo ssh -L $lport:$host:$port $via
   ssh -L $lport:$host:$port $via
 }
