@@ -95,6 +95,8 @@ tunnel() {
   elif ! [[ "$lport" =~ ^[0-9]+$ ]]; then
     via=$lport
     lport=$port
+  elif [ "x$via" = "x" ]; then
+    via=$host
   fi
 
   echo ssh -L $lport:$host:$port $via
