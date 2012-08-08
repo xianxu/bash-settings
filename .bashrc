@@ -237,3 +237,8 @@ w() {
   e=${@//\"/\\\"}
   watch -n1 "$e"
 }
+
+# make ctrl-s work in incremental search.
+stty -ixoff
+stty stop undef
+stty start undef
