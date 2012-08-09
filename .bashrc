@@ -242,3 +242,6 @@ w() {
 stty -ixoff
 stty stop undef
 stty start undef
+
+# bash readline vi mode
+set -o vi
