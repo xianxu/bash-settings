@@ -140,13 +140,13 @@ alias pjson='python -mjson.tool'
 
 # source search
 ffd() {
-  ff "(public|private|protected|module|class|trait|object|def|val|var|type|def self\.)[ \t]+$1"
+  ff "(module|class|trait|object|def|val|var|type|def self\.)[ \t]+$1"
 }
 
 ff() {
   e=${@//--/[a-zA-Z0-9_]*}
-  find -E . -regex ".*$e.*\.(java|scala|rb)" > .foundfiles
-  find . -name \*.go -o -name \*.py -o -name \*.h -o -name \*.c -o -name \*.cpp -o -name \*.cc -o -name \*.rhtml -o -name \*.xml -o -name \*.yml -o -name \*.erb -o -name \*.proto -o -name \*.pig -o -name \*.piglet -o -name \*.php -o -name \*.thrift -o -name \*.foundfiles -o -name \*.java -o -name \*.scala -o -name \*.rb -o -name \*.sh| xargs -J % grep --color=always -n -E "$e" % | less -X -R
+  find -E -L . -regex ".*$e.*\.(java|scala|rb|py)" > .foundfiles
+  ack --follow --pager=less -r "$e"
   rm -f .foundfiles
 }
 
@@ -238,6 +238,12 @@ w() {
   watch -n1 "$e"
 }
 
+c() {
+  color=$1
+  e=${2//--/[a-zA-Z0-9_]*}
+  ack --flush --passthru --color --color-match=$color $e
+}
+
 # make ctrl-s work in incremental search.
 stty -ixoff
 stty stop undef
@@ -245,3 +251,9 @@ stty start undef
 
 # bash readline vi mode
 set -o vi
+
+# create ctags file for scala
+scalatags() {
+  ctags -R --languages=scala --exclude=test *
+}
+
