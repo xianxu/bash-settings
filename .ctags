@@ -14,5 +14,6 @@
 --regex-MyJava=/^[ \t]*(((private|public)?[ \t]+)*)*(class|enum)[ \t]+([a-zA-Z0-9_]+)/\5/c,classes/
 --langdef=Go
 --langmap=Go:.go
---regex-Go=/^[ \t]*type[ \t]+([a-zA-Z0-9_]+)/\1/c,type/
---regex-Go=/^[ \t]*func[ \t]+([a-zA-Z0-9_]+)/\1/c,func/
+--regex-Go=/^[ \t]*func[ \t]+([a-zA-Z0-9_]+)/func \1/c,func/
+--regex-Go=/^[ \t]*func[ \t]+(\([^\)]+\))+[ \t]+([a-zA-Z0-9_]+)/func \1:\2/c,method/
+--regex-Go=/^[ \t]*type[ \t]+([a-zA-Z0-9_]+)/type \1/c,type/
