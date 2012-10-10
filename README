@@ -2,7 +2,8 @@ Just some of my bash settings, so that I can remember.
 
 Ubuntu note:
   - need to install https://bitbucket.org/sjl/hg-prompt
-  - need to install vim-nox for vim with ruby support
+  - sudo apt-get install vim-gtk
+  - sudo apt-get install vim-nok
   - need to install ruby1.8-dev
   - git config --global color.ui true
   - git config --global alias.ci "commit"

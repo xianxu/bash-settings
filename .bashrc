@@ -1,5 +1,6 @@
 umask 0007
 
+export _UNAME=`uname`
 # terminal settings
 export TERM='xterm-256color'
 export CLICOLOR=yes
@@ -103,7 +104,6 @@ tunnel() {
   echo ssh -L $lport:$host:$port $via
   ssh -L $lport:$host:$port $via
 }
-export _UNAME=`uname`
 function vv() {
   e=${@/:/ +}
   if [ "${_UNAME}" = "Linux" ]; then
@@ -141,7 +141,13 @@ alias srm='srm -i'
 alias dir='ls -al'
 alias less='less -MX'
 
-alias top='top -ocpu'
+top() {
+  if [ "${_UNAME}" = "Linux" ]; then
+    top -ocpu
+  else
+    top
+  fi
+}
 alias irb='irb --simple-prompt -r irb/completion'
 alias mkpasswd='openssl rand 6 -base64'
 
