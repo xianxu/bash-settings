@@ -1,10 +1,15 @@
 Just some of my bash settings, so that I can remember.
 
 Ubuntu note:
-  - need to install https://bitbucket.org/sjl/hg-prompt
-  - sudo apt-get install vim-gtk
-  - sudo apt-get install vim-nok
+  - need to install https://bitbucket.org/sjl/hg-prompt, clone and add .hgrc file to home dir.
+  - sudo apt-get install vim-gtk, for clipboard support.
+  - sudo apt-get install vim-nok, for ruby support, is this needed?
   - need to install ruby1.8-dev
   - git config --global color.ui true
   - git config --global alias.ci "commit"
   - git config --global alias.co "checkout"
+
+To get remote linux clipboard available locally (in vim), do: http://unix.stackexchange.com/questions/35285/is-there-a-clipboard-on-non-gui-ubuntu-linux-systems-can-i-synchronize-it-wit
+  - config X11 to share clipboard (need to start X11)
+  - X11 forwarding (ssh -X)
+  - vim with +xterm_clipboard support, check with vim --version
