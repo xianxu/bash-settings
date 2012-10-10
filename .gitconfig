@@ -1,2 +1,6 @@
 [alias]
+  ci = commit
+  co = checkout
   log1 = log --pretty=oneline --abbrev-commit
+[color]
+	ui = true
