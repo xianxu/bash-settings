@@ -102,15 +102,23 @@ tunnel() {
   echo ssh -L $lport:$host:$port $via
   ssh -L $lport:$host:$port $via
 }
-
+export _UNAME=`uname`
 function vv() {
   e=${@/:/ +}
-  /Applications/MacVim.app/Contents/MacOS/Vim -R -c "set number" "$e"
+  if [ "${_UNAME}" = "Linux" ]; then
+    vim -R -c "set number" "$e"
+  else
+    /Applications/MacVim.app/Contents/MacOS/Vim -R -c "set number" "$e"
+  fi
 }
 
 function v() {
   e=${@/:/ +}
-  /Applications/MacVim.app/Contents/MacOS/Vim -c "set number" "$e"
+  if [ "${_UNAME}" = "Linux" ]; then
+    vim -R -c "set number" "$e"
+  else
+    /Applications/MacVim.app/Contents/MacOS/Vim -c "set number" "$e"
+  fi
 }
 
 alias http='python -m SimpleHTTPServer'
