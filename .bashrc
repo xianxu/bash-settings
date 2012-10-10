@@ -5,6 +5,7 @@ export TERM='xterm-256color'
 export CLICOLOR=yes
 #export DYLD_LIBRARY_PATH=/Applications/YourKit_Java_Profiler_9.5.5.app/bin/mac
 export t_Co=256
+export EDITOR=vim
 
 # java settings
 export JVMSTAT_JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home
