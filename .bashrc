@@ -69,7 +69,7 @@ git_or_hg() {
   fi
   echo $ghg
 }
-export PS1="\[$txtblu\][\[$undblu\]\w\[$txtred\] \$(git_or_hg)\[$txtblu\]] \[$txtrst\][\A]\n[\u@\h] \$ "
+export PS1="\[$txtblu\]\$PWD \[$txtred\]\$(git_or_hg)\[$txtrst\]\[$txtrst\][\A]\n[\u@\[$bldylw\]\h\[$txtrst\]] \$ "
 
 # tunnel to a machine.
 # usage:
