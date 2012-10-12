@@ -14,9 +14,11 @@ export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK
 
 # golang settings
 export GOROOT=$HOME/workspace/go
-export GOARCH=amd64
 export GOBIN=$GOROOT/bin
-export GOPATH=$HOME/workspace/go
+export GOPATH=$HOME/workspace/mygo
+# change those two
+export GOOS=linux
+export GOARCH=amd64
 
 export PATH=$GOPATH/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
 
