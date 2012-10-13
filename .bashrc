@@ -14,9 +14,11 @@ export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK
 
 # golang settings
 export GOROOT=$HOME/workspace/go
-export GOARCH=amd64
 export GOBIN=$GOROOT/bin
-export GOPATH=$HOME/workspace/go
+export GOPATH=$HOME/workspace/mygo
+# change those two
+export GOOS=linux
+export GOARCH=amd64
 
 export PATH=$GOPATH/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
 
@@ -116,7 +118,7 @@ function vv() {
 function v() {
   e=${@/:/ +}
   if [ "${_UNAME}" = "Linux" ]; then
-    vim -R -c "set number" "$e"
+    vim -c "set number" "$e"
   else
     /Applications/MacVim.app/Contents/MacOS/Vim -c "set number" "$e"
   fi
@@ -141,11 +143,11 @@ alias srm='srm -i'
 alias dir='ls -al'
 alias less='less -MX'
 
-top() {
+t() {
   if [ "${_UNAME}" = "Linux" ]; then
-    top -ocpu
-  else
     top
+  else
+    top -ocpu
   fi
 }
 alias irb='irb --simple-prompt -r irb/completion'
@@ -160,8 +162,14 @@ ffd() {
 
 ff() {
   e=${@//--/[a-zA-Z0-9_]*}
-  find -E -L . -regex ".*$e.*\.(java|scala|rb|py)" > .foundfiles
-  ack --follow --pager=less -r "$e"
+  if [ "${_UNAME}" = "Linux" ]; then
+    find -regextype posix-extended -L . -regex ".*$e.*\.(java|scala|rb|py)" > .foundfiles
+    ack --follow --pager="less -R" -r "$e"
+  else
+    find -E -L . -regex ".*$e.*\.(java|scala|rb|py)" > .foundfiles
+    ack --follow --pager=less -r "$e"
+  fi
+
   rm -f .foundfiles
 }
 
