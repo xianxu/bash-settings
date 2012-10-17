@@ -1,9 +1,8 @@
-Just some of my bash settings, so that I can remember.
+This is basically now my bash + x settings
 
 Ubuntu note:
   - need to install https://bitbucket.org/sjl/hg-prompt, clone and add .hgrc file to home dir.
   - sudo apt-get install vim-gtk, for clipboard support.
-  - sudo apt-get install vim-nok, for ruby support, is this needed?
   - need to install ruby1.8-dev
   - git config --global color.ui true
   - git config --global alias.ci "commit"
