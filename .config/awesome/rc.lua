@@ -91,17 +91,15 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- }}}
 
 -- {{{ Wibox
--- Create a textclock widget
-mytextclock = awful.widget.textclock({ align = "right" })
--- Initialize widget
+datewidget = widget({ type = "textbox" })
+vicious.register(datewidget, vicious.widgets.date, "%b %d - %X", 1)
+
 memwidget = widget({ type = "textbox" })
--- Register widget
 vicious.register(memwidget, vicious.widgets.mem, "Mem: $1%", 10)
--- Initialize widget
+
 cpuwidget = widget({ type = "textbox" })
--- Register widget
-vicious.register(cpuwidget, vicious.widgets.cpu, "CPU: $1%", 1)
--- Separator
+vicious.register(cpuwidget, vicious.widgets.cpu, "CPU: $1%", 3)
+
 local separator = widget({ type = "textbox" })
 separator.text = ' <span color="' .. beautiful.get().fg_normal .. '" size="small">⋆</span> '
 
@@ -183,7 +181,8 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
-        mytextclock,
+	separator,
+	datewidget,
 	separator,
 	memwidget,
 	separator,
