@@ -3,8 +3,8 @@ Just some of my bash settings, so that I can remember.
 Ubuntu note:
   - need to install https://bitbucket.org/sjl/hg-prompt, clone and add .hgrc file to home dir.
   - sudo apt-get install vim-gtk, for clipboard support.
-  - sudo apt-get install vim-nok, for ruby support, is this needed?
-  - need to install ruby1.8-dev
+  - sudo apt-get install vim-nok, for ruby support, is this needed if we do vim-gtk?
+  - need to install ruby1.8-dev, for compile vim command-t
   - git config --global color.ui true
   - git config --global alias.ci "commit"
   - git config --global alias.co "checkout"
@@ -13,3 +13,10 @@ To get remote linux clipboard available locally (in vim), do: http://unix.stacke
   - config X11 to share clipboard (need to start X11)
   - X11 forwarding (ssh -X)
   - vim with +xterm_clipboard support, check with vim --version
+
+Tmux clipboard, need to: http://robots.thoughtbot.com/post/19398560514/how-to-copy-and-paste-with-tmux-on-mac-os-x
+  - brew install reattach-to-user-namespace
+  - and in .tmux.conf have: set-option -g default-command "reattach-to-user-namespace -l sh"
+  - and in .vimrc have: set clipboard+=autoselect
+
+
