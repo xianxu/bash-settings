@@ -40,7 +40,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/home/xx/.config/awesome/theme/xx.lua")
+beautiful.init("/home/xx/.config/awesome/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
@@ -57,8 +57,18 @@ modkey = "Mod4"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
 {
+    --awful.layout.suit.floating,
     awful.layout.suit.tile,
+    --awful.layout.suit.tile.left,
+    --awful.layout.suit.tile.bottom,
+    --awful.layout.suit.tile.top,
+    --awful.layout.suit.fair,
+    --awful.layout.suit.fair.horizontal,
+    --awful.layout.suit.spiral,
+    --awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
+    --awful.layout.suit.max.fullscreen,
+    --awful.layout.suit.magnifier
 }
 -- }}}
 
@@ -91,6 +101,7 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- }}}
 
 -- {{{ Wibox
+-- Create a textclock widget
 datewidget = widget({ type = "textbox" })
 vicious.register(datewidget, vicious.widgets.date, "%b %d - %X", 1)
 
@@ -383,12 +394,6 @@ end)
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-
--- {{{ xx additions
--- set X defaults
-awful.util.spawn_with_shell("xrdb -merge /home/xx/.Xresources")
---awful.util.spawn_with_shell("run_once autocutsel autocutsel -fork")
---awful.util.spawn_with_shell("run_once autocutsel1 autocutsel1 -selection PRIMARY -fork")
+--
 awful.util.spawn_with_shell("run_once parcellite parcellite")
--- }}}
 
