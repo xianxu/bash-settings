@@ -1,4 +1,4 @@
-Just some of my bash settings, so that I can remember.
+This is basically now my bash + x settings
 
 Ubuntu note:
   - need to install https://bitbucket.org/sjl/hg-prompt, clone and add .hgrc file to home dir.

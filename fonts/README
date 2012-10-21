@@ -1,0 +1,10 @@
+To use in X, do:
+  cp simsun.ttc /usr/share/fonts/truetype/simsum/simsun.ttf  
+  cd /usr/share/fonts/truetype/simsun
+  sudo chmod 644 simsun.ttf
+  sudo mkfontdir
+  sudo mkfontscale
+
+Then restart x should be fine.
+
+http://kunxi.org/archives/2007/05/howto-display-sharp-chinese-in-gentoo-linux/
