@@ -301,8 +301,8 @@ else
 
   # this doesn't work because for some reason the ppid is 1 both when
   # starting from ~/.profile and when executing as `ssh-agent bash`
-  #agent_ppid="$(ps -ef | grep "ssh-agent" | grep -v "grep" | awk '{print($3)}')"
-  agent_ppid="$(($agent_pid - 1))"
+  agent_ppid="$(ps -ef | grep "ssh-agent" | grep -v "grep" | awk '{print($3)}')"
+  #agent_ppid="$(($agent_pid - 1))"
 
   # and the actual auth socket file name is simply numerically one less than
   # the actual process id, regardless of what `ps -ef` reports as the ppid
