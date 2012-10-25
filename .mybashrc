@@ -20,7 +20,7 @@ export GOPATH=$HOME/workspace/mygo
 export GOOS=linux
 export GOARCH=amd64
 
-export PATH=$JAVA_HOME/bin:$GOPATH/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
+export PATH=$JAVA_HOME/bin:$GOPATH/bin:$GOROOT/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
 
 # dealing with git and hg, mostly set good PS1
 source ~/.git-completion.bash
@@ -314,3 +314,15 @@ else
   echo "Agent sock $agent_sock"
   export SSH_AUTH_SOCK="$agent_sock"
 fi
+
+scalatags() {
+  ctags -R --languages=scala --exclude=test *
+}
+
+jvmtags() {
+  ctags -R --languages=Scala,MyJava --exclude=test *
+}
+gotags() {
+  ctags -R --languages=Go --exclude=*test.go *
+}
+

@@ -12,12 +12,12 @@
 --langdef=MyJavaTemplate
 --langmap=MyJava:.java.template
 --regex-MyJava=/^[ \t]*(((private|public)?[ \t]+)*)*(class|enum)[ \t]+([a-zA-Z0-9_]+)/\5/c,classes/
---langdef=Go
---langmap=Go:.go
---regex-Go=/^func[ \t]+([a-zA-Z0-9_]+)/func;\1//
---regex-Go=/^func[ \t]+(\([^\)]+\))+[ \t]+([a-zA-Z0-9_]+)/func;\1;\2//
---regex-Go=/^type[ \t]+([a-zA-Z0-9_]+)/type;\1//
---regex-Go=/^var[ \t]+([a-zA-Z0-9_]+)/var;\1//
---regex-Go=/^const[ \t]+([a-zA-Z0-9_]+)/const;\1//
---regex-Go=/^\t([A-Z][a-zA-Z0-9_]+)\(/im;\1;\2//
+--langdef=GO
+--langmap=GO:.go
+--regex-GO=/^func[ \t]+([a-zA-Z0-9_]+)/func;\1//
+--regex-GO=/^func[ \t]+(\([^\)]+\))+[ \t]+([a-zA-Z0-9_]+)/func;\1;\2//
+--regex-GO=/^type[ \t]+([a-zA-Z0-9_]+)/type;\1//
+--regex-GO=/^var[ \t]+([a-zA-Z0-9_]+)/var;\1//
+--regex-GO=/^const[ \t]+([a-zA-Z0-9_]+)/const;\1//
+--regex-GO=/^\t([A-Z][a-zA-Z0-9_]+)\(/im;\1;\2//
 
