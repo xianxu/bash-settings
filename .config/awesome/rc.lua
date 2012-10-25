@@ -216,10 +216,35 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    awful.key({ "Mod1" }, "Escape", function ()
+        -- If you want to always position the menu on the same place set coordinates
+        awful.menu.menu_keys.down = { "Down", "Alt_L" }
+        local cmenu = awful.menu.clients({width=245}, { keygrabber=true, coords={x=525, y=330} })
+    end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
+    awful.key({ modkey, "Control" }, "Down",  function () awful.client.moveresize(  0,  20,   0,   0) end),
+    awful.key({ modkey, "Control" }, "Up",    function () awful.client.moveresize(  0, -20,   0,   0) end),
+    awful.key({ modkey, "Control" }, "Left",  function () awful.client.moveresize(-20,   0,   0,   0) end),
+    awful.key({ modkey, "Control" }, "Right", function () awful.client.moveresize( 20,   0,   0,   0) end),
+
+    awful.key({ modkey, "Mod1" }, "Down",  function () awful.client.moveresize(  0,   0,   0, -20) end),
+    awful.key({ modkey, "Mod1" }, "Up",    function () awful.client.moveresize(  0,   0,   0,  20) end),
+    awful.key({ modkey, "Mod1" }, "Left",  function () awful.client.moveresize(  0,   0, -20,   0) end),
+    awful.key({ modkey, "Mod1" }, "Right", function () awful.client.moveresize(  0,   0,  20,   0) end),
+
+    awful.key({ modkey,           }, "j",
+        function ()
+            awful.client.focus.byidx(-1)
+            if client.focus then client.focus:raise() end
+        end),
+    awful.key({ modkey,           }, "k",
+        function ()
+            awful.client.focus.byidx( 1)
+            if client.focus then client.focus:raise() end
+        end),
     awful.key({ modkey, "Shift"   }, "Left",
         function ()
             awful.client.focus.byidx(-1)
@@ -275,12 +300,12 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
+    awful.key({ modkey, "Shift"   }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
+    awful.key({ modkey,           }, "f",      awful.client.floating.toggle ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey,           }, "n",
         function (c)
