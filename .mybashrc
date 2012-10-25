@@ -323,6 +323,6 @@ jvmtags() {
   ctags -R --languages=Scala,MyJava --exclude=test *
 }
 gotags() {
-  ctags -R --languages=Go --exclude=*test.go *
+  ctags -R --languages=MyGo --exclude=*test.go *
 }
 
