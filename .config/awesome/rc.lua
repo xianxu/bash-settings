@@ -226,6 +226,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     awful.key({ modkey, "Shift"   }, "s", function () awful.util.spawn_with_shell("shutter -s") end),
+    awful.key({ modkey,           }, "F12", function () awful.util.spawn_with_shell("xlock") end),
 
     awful.key({ modkey, "Control" }, "Down",  function () awful.client.moveresize(  0,  20,   0,   0) end),
     awful.key({ modkey, "Control" }, "Up",    function () awful.client.moveresize(  0, -20,   0,   0) end),
