@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "Setting up vmware-user, need to sudo"
+sudo /usr/bin/vmware-user
+echo "Setting up ssh-add, need ssh key passphrase"
+ssh-add
