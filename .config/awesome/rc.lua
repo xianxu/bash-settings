@@ -192,13 +192,13 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
-	separator,
-	datewidget,
-	separator,
-	memwidget,
-	separator,
-	cpuwidget,
-	separator,
+        separator,
+        datewidget,
+        separator,
+        memwidget,
+        separator,
+        cpuwidget,
+        separator,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -307,6 +307,16 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "f",      awful.client.floating.toggle ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+    awful.key({ modkey,           }, "p",      -- to a small window to the top right corner
+        function (c)
+            -- get client size and screen size, we will try to place window to top right
+            cg = c:geometry()
+            sg = screen[mouse.screen].workarea
+            -- resize client to upper right corner and on top, for quick notes or calculator etc.
+                  awful.client.floating.set(c, true)
+            c.ontop = true
+            awful.client.moveresize(sg.width * 0.66 - cg.x, 24 - cg.y, sg.width * 0.34 - cg.width, sg.height * 0.34 - cg.height, c)
+        end),
     awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
