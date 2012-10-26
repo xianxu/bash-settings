@@ -307,13 +307,13 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "f",      awful.client.floating.toggle ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
-    awful.key({ modkey,           }, "p",      -- to a small window to the top right corner
+    awful.key({ modkey,           }, "p",      -- pin a floater to the top right corner
         function (c)
             -- get client size and screen size, we will try to place window to top right
             cg = c:geometry()
-            sg = screen[mouse.screen].workarea
+	    s  = mouse.screen
+            sg = screen[s].workarea
             -- resize client to upper right corner and on top, for quick notes or calculator etc.
-                  awful.client.floating.set(c, true)
             c.ontop = true
             awful.client.moveresize(sg.width * 0.66 - cg.x, 24 - cg.y, sg.width * 0.34 - cg.width, sg.height * 0.34 - cg.height, c)
         end),
@@ -330,7 +330,7 @@ clientkeys = awful.util.table.join(
         end)
 )
 
--- Compute the maximum number of digit we need, limited to 9
+-- Compute the maximum number of digit we need, limited to 10
 keynumber = 0
 for s = 1, screen.count() do
    keynumber = math.min(10, math.max(#tags[s], keynumber));
@@ -432,4 +432,5 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 --
 awful.util.spawn_with_shell("run_once parcellite parcellite")
 awful.util.spawn_with_shell("vmware-user")
+awful.util.spawn_with_shell("shutter --min_at_startup")
 
