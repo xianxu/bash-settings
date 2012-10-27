@@ -75,9 +75,12 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
+-- Define keycode of switching to tags, this represents:
+--      1   2   3   4   5   6   7   8   9   10  .
+keys = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 60}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 }, s, layouts[1])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "." }, s, layouts[1])
 end
 -- }}}
 
@@ -102,17 +105,19 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 
 -- {{{ Wibox
 -- Create a textclock widget
-datewidget = widget({ type = "textbox" })
+local datewidget = widget({ type = "textbox" })
 vicious.register(datewidget, vicious.widgets.date, "%b %d - %X", 1)
 
-memwidget = widget({ type = "textbox" })
+local memwidget = widget({ type = "textbox" })
 vicious.register(memwidget, vicious.widgets.mem, "Mem: $1%", 10)
 
-cpuwidget = widget({ type = "textbox" })
+local cpuwidget = widget({ type = "textbox" })
 vicious.register(cpuwidget, vicious.widgets.cpu, "CPU: $1%", 3)
 
 local separator = widget({ type = "textbox" })
 separator.text = ' <span color="' .. beautiful.get().fg_normal .. '" size="small">⋆</span> '
+local space = widget({ type = "textbox" })
+space.text = ' <span color="' .. beautiful.get().fg_normal .. '" size="small"> </span> '
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -188,6 +193,7 @@ for s = 1, screen.count() do
         {
             mylauncher,
             mytaglist[s],
+	    space,
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
@@ -200,6 +206,7 @@ for s = 1, screen.count() do
         cpuwidget,
         separator,
         s == 1 and mysystray or nil,
+	space,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -353,38 +360,40 @@ clientkeys = awful.util.table.join(
         end)
 )
 
--- Compute the maximum number of digit we need, limited to 10
+-- Compute the maximum number of digit we need, limited to max number of workspace allowed,
+-- currently 11.
 keynumber = 0
 for s = 1, screen.count() do
-   keynumber = math.min(10, math.max(#tags[s], keynumber));
+   keynumber = math.min(11, math.max(#tags[s], keynumber));
 end
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, keynumber do
+    key = keys[i]
     globalkeys = awful.util.table.join(globalkeys,
-        awful.key({ modkey }, "#" .. i + 9,
+        awful.key({ modkey }, "#" .. key,
                   function ()
                         local screen = mouse.screen
                         if tags[screen][i] then
                             awful.tag.viewonly(tags[screen][i])
                         end
                   end),
-        awful.key({ modkey, "Control" }, "#" .. i + 9,
+        awful.key({ modkey, "Control" }, "#" .. key,
                   function ()
                       local screen = mouse.screen
                       if tags[screen][i] then
                           awful.tag.viewtoggle(tags[screen][i])
                       end
                   end),
-        awful.key({ modkey, "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Shift" }, "#" .. key,
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
                           awful.client.movetotag(tags[client.focus.screen][i])
                       end
                   end),
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Control", "Shift" }, "#" .. key,
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
                           awful.client.toggletag(tags[client.focus.screen][i])
