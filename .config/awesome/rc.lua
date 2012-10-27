@@ -330,6 +330,16 @@ clientkeys = awful.util.table.join(
             c.ontop = true
             awful.client.moveresize(sg.width * 0.6 - cg.x, 24 - cg.y, sg.width * 0.4 - cg.width, sg.height * 0.6 - cg.height, c)
         end),
+    awful.key({ modkey, "Shift"   }, "\\",      -- pin a floater to the top right corner, a more vertical format
+        function (c)
+            -- get client size and screen size, we will try to place window to top right
+            cg = c:geometry()
+	    s  = mouse.screen
+            sg = screen[s].workarea
+            -- resize client to upper right corner and on top, for quick notes or calculator etc.
+            c.ontop = true
+            awful.client.moveresize(sg.width * 0.7 - cg.x, 24 - cg.y, sg.width * 0.3 - cg.width, sg.height * 0.6 - cg.height, c)
+        end),
     awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
