@@ -164,10 +164,10 @@ ff() {
   e=${@//--/[a-zA-Z0-9_]*}
   if [ "${_UNAME}" = "Linux" ]; then
     find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack-grep --follow --type-set yacc=.y -r --pager="/usr/bin/less -R" -r "$e"
+    ack-grep --follow --type-set yacc=.y,go=.go -r --pager="less -R -X" -r "$e"
   else
     find -E -L . -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack --follow --pager=less --type-set yacc=.y -r "$e"
+    ack --follow --pager="less -R -X" --type-set yacc=.y,go=.g -r "$e"
   fi
 
   rm -f .foundfiles
