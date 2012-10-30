@@ -310,6 +310,7 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
+    --awful.key({ modkey, "Shift"   }, "=",      function (c) awful.util.spawn_with_shell("nvpy") end),
     awful.key({ modkey,           }, "e",      function (c) awful.util.spawn_with_shell("anamnesis.py -b") end),
     awful.key({ modkey, "Shift"   }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
@@ -419,7 +420,9 @@ awful.rules.rules = {
                      border_color = beautiful.border_normal,
                      focus = true,
                      keys = clientkeys,
-                     buttons = clientbuttons } },
+		     buttons = clientbuttons } },
+    { rule = { name = "nvPY" },
+      properties = { floating = true } },
     { rule = { name = "anamnesis.py" },
       properties = { floating = true } },
     { rule = { class = "MPlayer" },
