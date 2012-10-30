@@ -310,7 +310,7 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
-    --awful.key({ modkey, "Shift"   }, "=",      function (c) awful.util.spawn_with_shell("nvpy") end),
+    awful.key({ modkey,           }, "\\",     function (c) awful.util.spawn("run_once nvpy /home/xx/.python/bin/python /home/xx/.python/bin/nvpy") end),
     awful.key({ modkey,           }, "e",      function (c) awful.util.spawn_with_shell("anamnesis.py -b") end),
     awful.key({ modkey, "Shift"   }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
