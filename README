@@ -19,4 +19,5 @@ Tmux clipboard, need to: http://robots.thoughtbot.com/post/19398560514/how-to-co
   - and in .tmux.conf have: set-option -g default-command "reattach-to-user-namespace -l sh"
   - and in .vimrc have: set clipboard+=autoselect
 
-
+And a very good clipboard manager:
+  http://anamnesis.sourceforge.net/
