@@ -1,4 +1,5 @@
 # https://github.com/caseyhoward/nokogiri-plist
+require 'rubygems'
 require 'nokogiri-plist'
 
 # /apps/gnome-terminal/profiles/Default

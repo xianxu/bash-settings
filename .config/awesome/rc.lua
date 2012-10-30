@@ -77,10 +77,10 @@ layouts =
 tags = {}
 -- Define keycode of switching to tags, this represents:
 --      1   2   3   4   5   6   7   8   9   10  .
-keys = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 60}
+keys = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 60, 61}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "." }, s, layouts[1])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, ".", "/" }, s, layouts[1])
 end
 -- }}}
 
@@ -310,6 +310,7 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
+    awful.key({ modkey,           }, "e",      function (c) awful.util.spawn_with_shell("anamnesis.py -b") end),
     awful.key({ modkey, "Shift"   }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
@@ -364,7 +365,7 @@ clientkeys = awful.util.table.join(
 -- currently 11.
 keynumber = 0
 for s = 1, screen.count() do
-   keynumber = math.min(11, math.max(#tags[s], keynumber));
+   keynumber = math.min(12, math.max(#tags[s], keynumber));
 end
 
 -- Bind all key numbers to tags.
@@ -419,6 +420,8 @@ awful.rules.rules = {
                      focus = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
+    { rule = { name = "anamnesis.py" },
+      properties = { floating = true } },
     { rule = { class = "MPlayer" },
       properties = { floating = true } },
     { rule = { class = "pinentry" },
@@ -463,5 +466,5 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- }}}
 --
 awful.util.spawn_with_shell("run_once parcellite parcellite")
-awful.util.spawn_with_shell("vmware-user")
 awful.util.spawn_with_shell("shutter --min_at_startup")
+awful.util.spawn_with_shell("run_once anamnesis anamnesis.py --start")
