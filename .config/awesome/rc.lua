@@ -227,7 +227,7 @@ globalkeys = awful.util.table.join(
     awful.key({ "Mod1" }, "Escape", function ()
         -- If you want to always position the menu on the same place set coordinates
         awful.menu.menu_keys.down = { "Down", "Alt_L" }
-        local cmenu = awful.menu.clients({width=245}, { keygrabber=true, coords={x=525, y=330} })
+        local cmenu = awful.menu.clients({width=400}, { keygrabber=true, coords={x=400, y=330} })
     end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
@@ -315,8 +315,8 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "e",      function (c) awful.util.spawn_with_shell("anamnesis.py -b") end),
     awful.key({ modkey, "Shift"   }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
-    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
+    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "f",      awful.client.floating.toggle ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
@@ -378,16 +378,16 @@ for i = 1, keynumber do
     globalkeys = awful.util.table.join(globalkeys,
         awful.key({ modkey }, "#" .. key,
                   function ()
-                        local screen = mouse.screen
-      local current = awful.tag.selected(screen)
-      local jump = tags[screen][i]
-                        if jump then
-          if jump == current then
-              awful.tag.history.restore()
-          else
-                                awful.tag.viewonly(tags[screen][i])
-          end
-                        end
+                      local screen = mouse.screen
+                      local tag = awful.tag.selected(screen)
+                      local newtag = tags[screen][i]
+                      if newtag then
+                          if newtag == tag then
+                              awful.tag.history.restore()
+                          else
+                              awful.tag.viewonly(tags[screen][i])
+		          end
+                      end
                   end),
         awful.key({ modkey, "Control" }, "#" .. key,
                   function ()
