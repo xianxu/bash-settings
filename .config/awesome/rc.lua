@@ -26,8 +26,8 @@ end
 do
     local in_error = false
     awesome.add_signal("debug::error", function (err)
-        -- Make sure we don't go into an endless error loop
-        if in_error then return end
+    -- Make sure we don't go into an endless error loop
+    if in_error then return end
         in_error = true
 
         naughty.notify({ preset = naughty.config.presets.critical,
@@ -76,21 +76,21 @@ layouts =
 -- Define a tag table which hold all screen tags.
 tags = {}
 -- Define keycode of switching to tags, this represents:
---      1   2   3   4   5   6   7   8   9   10  .
-keys = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 60, 61}
+keys     = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "/"}
+keycodes = { 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  60,  61}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, ".", "/" }, s, layouts[1])
+    tags[s] = awful.tag(keys, s, layouts[1])
 end
 -- }}}
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
+    { "manual", terminal .. " -e man awesome" },
+    { "edit config", editor_cmd .. " " .. awesome.conffile },
+    { "restart", awesome.restart },
+    { "quit", awesome.quit }
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
@@ -193,7 +193,7 @@ for s = 1, screen.count() do
         {
             mylauncher,
             mytaglist[s],
-	    space,
+      space,
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
@@ -206,7 +206,7 @@ for s = 1, screen.count() do
         cpuwidget,
         separator,
         s == 1 and mysystray or nil,
-	space,
+  space,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -223,6 +223,7 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    -- task switch list
     awful.key({ "Mod1" }, "Escape", function ()
         -- If you want to always position the menu on the same place set coordinates
         awful.menu.menu_keys.down = { "Down", "Alt_L" }
@@ -323,7 +324,7 @@ clientkeys = awful.util.table.join(
         function (c)
             -- get client size and screen size, we will try to place window to top right
             cg = c:geometry()
-	    s  = mouse.screen
+            s  = mouse.screen
             sg = screen[s].workarea
             -- resize client to upper right corner and on top, for quick notes or calculator etc.
             c.ontop = true
@@ -333,7 +334,7 @@ clientkeys = awful.util.table.join(
         function (c)
             -- get client size and screen size, we will try to place window to top right
             cg = c:geometry()
-	    s  = mouse.screen
+            s  = mouse.screen
             sg = screen[s].workarea
             -- resize client to upper right corner and on top, for quick notes or calculator etc.
             c.ontop = true
@@ -343,7 +344,7 @@ clientkeys = awful.util.table.join(
         function (c)
             -- get client size and screen size, we will try to place window to top right
             cg = c:geometry()
-	    s  = mouse.screen
+            s  = mouse.screen
             sg = screen[s].workarea
             -- resize client to upper right corner and on top, for quick notes or calculator etc.
             c.ontop = true
@@ -373,13 +374,19 @@ end
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, keynumber do
-    key = keys[i]
+    key = keycodes[i]
     globalkeys = awful.util.table.join(globalkeys,
         awful.key({ modkey }, "#" .. key,
                   function ()
                         local screen = mouse.screen
-                        if tags[screen][i] then
-                            awful.tag.viewonly(tags[screen][i])
+      local current = awful.tag.selected(screen)
+      local jump = tags[screen][i]
+                        if jump then
+          if jump == current then
+              awful.tag.history.restore()
+          else
+                                awful.tag.viewonly(tags[screen][i])
+          end
                         end
                   end),
         awful.key({ modkey, "Control" }, "#" .. key,
@@ -420,7 +427,7 @@ awful.rules.rules = {
                      border_color = beautiful.border_normal,
                      focus = true,
                      keys = clientkeys,
-		     buttons = clientbuttons } },
+         buttons = clientbuttons } },
     { rule = { name = "nvPY" },
       properties = { floating = true } },
     { rule = { name = "anamnesis.py" },
