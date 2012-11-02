@@ -476,5 +476,6 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- }}}
 --
 awful.util.spawn_with_shell("run_once parcellite parcellite")
-awful.util.spawn_with_shell("shutter --min_at_startup")
 awful.util.spawn_with_shell("run_once anamnesis anamnesis.py --start")
+awful.util.spawn_with_shell("run_once vmtoolsd vmware-user")
+awful.util.spawn_with_shell("shutter --min_at_startup")
