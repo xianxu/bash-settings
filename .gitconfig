@@ -4,3 +4,10 @@
   log1 = log --pretty=oneline --abbrev-commit
 [color]
 	ui = true
+[user]
+	name = Xian Xu
+	email = xx@twitter.com
+[diff]
+	tool = vimdiff
+[merge]
+	tool = vimdiff2
