@@ -22,7 +22,7 @@ export GOPATH=$HOME/workspace/mygo
 export GOOS=linux
 export GOARCH=amd64
 
-export PATH=$HOME/.rvm/bin:$JAVA_HOME/bin:$GOPATH/bin:$GOROOT/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
+export PATH=$HOME/src/apache-cassandra-1.1.6/bin:$HOME/src/zookeeper-3.4.4/bin:$HOME/.main27/bin:$HOME/.rvm/bin:$JAVA_HOME/bin:$GOPATH/bin:$GOROOT/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
 
 # dealing with git and hg, mostly set good PS1
 source ~/.git-completion.bash
@@ -128,7 +128,6 @@ function v() {
 
 alias http='python -m SimpleHTTPServer'
 alias l='ls -lrt'
-alias gvim='/Applications/MacVim.app/Contents/MacOS/MacVim'
 
 export LANG=en_US.UTF-8
 set meta-flag on
@@ -163,7 +162,7 @@ ffd() {
 }
 
 ff() {
-  e=${@//--/[a-zA-Z0-9_]*}
+  e=${@//../[a-zA-Z0-9_]*}
   if [ "${_UNAME}" = "Linux" ]; then
     find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
     ack-grep --follow --nogroup --type-set yacc=.y,go=.go --pager="less -R -X" -r "$e"
@@ -176,7 +175,7 @@ ff() {
 }
 
 FF() {
-  e=${@//--/[a-zA-Z0-9_]*}
+  e=${@//../[a-zA-Z0-9_]*}
   if [ "${_UNAME}" = "Linux" ]; then
     find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
     ack-grep -i --follow --nogroup --type-set yacc=.y,go=.go --pager="less -R -X" -r "$e"

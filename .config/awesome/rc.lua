@@ -76,8 +76,8 @@ layouts =
 -- Define a tag table which hold all screen tags.
 tags = {}
 -- Define keycode of switching to tags, this represents:
-keys     = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "/"}
-keycodes = { 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  60,  61}
+keys     = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", ".", "/"}
+keycodes = { 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  59,  60,  61}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag(keys, s, layouts[1])
@@ -256,12 +256,12 @@ globalkeys = awful.util.table.join(
             awful.client.focus.byidx( 1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey, "Shift"   }, "Left",
+    awful.key({ modkey,           }, "Up",
         function ()
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey, "Shift"   }, "Right",
+    awful.key({ modkey,           }, "Down",
         function ()
             awful.client.focus.byidx( 1)
             if client.focus then client.focus:raise() end
@@ -311,7 +311,7 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "\\",     function (c) awful.util.spawn("run_once nvpy /home/xx/.python/bin/python /home/xx/.python/bin/nvpy") end),
+    awful.key({ modkey,           }, "\\",     function (c) awful.util.spawn("run_once nvpy /home/xx/.main27/bin/python /home/xx/.main27/bin/nvpy") end),
     awful.key({ modkey,           }, "e",      function (c) awful.util.spawn_with_shell("anamnesis.py -b") end),
     awful.key({ modkey, "Shift"   }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
@@ -328,7 +328,7 @@ clientkeys = awful.util.table.join(
             sg = screen[s].workarea
             -- resize client to upper right corner and on top, for quick notes or calculator etc.
             c.ontop = true
-            awful.client.moveresize(sg.width * 0.66 - cg.x, 24 - cg.y, sg.width * 0.34 - cg.width, sg.height * 0.34 - cg.height, c)
+            awful.client.moveresize(sg.width * 0.66 - cg.x, 80 - cg.y, sg.width * 0.34 - cg.width, sg.height * 0.34 - cg.height, c)
         end),
     awful.key({ modkey, "Shift"   }, "p",      -- pin a floater to the top right corner, bigger
         function (c)
@@ -338,7 +338,7 @@ clientkeys = awful.util.table.join(
             sg = screen[s].workarea
             -- resize client to upper right corner and on top, for quick notes or calculator etc.
             c.ontop = true
-            awful.client.moveresize(sg.width * 0.6 - cg.x, 24 - cg.y, sg.width * 0.4 - cg.width, sg.height * 0.6 - cg.height, c)
+            awful.client.moveresize(sg.width * 0.6 - cg.x, 80 - cg.y, sg.width * 0.4 - cg.width, sg.height * 0.6 - cg.height, c)
         end),
     awful.key({ modkey, "Shift"   }, "\\",      -- pin a floater to the top right corner, a more vertical format
         function (c)
@@ -348,7 +348,7 @@ clientkeys = awful.util.table.join(
             sg = screen[s].workarea
             -- resize client to upper right corner and on top, for quick notes or calculator etc.
             c.ontop = true
-            awful.client.moveresize(sg.width * 0.7 - cg.x, 24 - cg.y, sg.width * 0.3 - cg.width, sg.height * 0.6 - cg.height, c)
+            awful.client.moveresize(sg.width * 0.7 - cg.x, 80 - cg.y, sg.width * 0.3 - cg.width, sg.height * 0.6 - cg.height, c)
         end),
     awful.key({ modkey,           }, "n",
         function (c)
@@ -367,7 +367,7 @@ clientkeys = awful.util.table.join(
 -- currently 11.
 keynumber = 0
 for s = 1, screen.count() do
-   keynumber = math.min(12, math.max(#tags[s], keynumber));
+   keynumber = math.min(table.getn(keys), math.max(#tags[s], keynumber));
 end
 
 -- Bind all key numbers to tags.
@@ -428,8 +428,6 @@ awful.rules.rules = {
                      focus = true,
                      keys = clientkeys,
          buttons = clientbuttons } },
-    { rule = { name = "nvPY" },
-      properties = { floating = true } },
     { rule = { name = "anamnesis.py" },
       properties = { floating = true } },
     { rule = { class = "MPlayer" },
@@ -475,7 +473,8 @@ client.add_signal("focus", function(c) c.border_color = beautiful.border_focus e
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 --
+--awful.util.spawn_with_shell("/home/xx/bin/lightdmxrandr.sh")
 awful.util.spawn_with_shell("run_once parcellite parcellite")
 awful.util.spawn_with_shell("run_once anamnesis anamnesis.py --start")
-awful.util.spawn_with_shell("run_once vmtoolsd vmware-user")
-awful.util.spawn_with_shell("shutter --min_at_startup")
+awful.util.spawn_with_shell("run_once vmtoolsd /usr/bin/vmware-user")
+--awful.util.spawn_with_shell("shutter --min_at_startup")
