@@ -75,9 +75,9 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
--- Define keycode of switching to tags, this represents:
-keys     = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", ".", "/"}
-keycodes = { 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  59,  60,  61}
+-- Define tag names and keycode to switch to those tags
+keys     = { "1", "2", "3", "4", "z", "x", "c", "v", ",", ".", "/"}
+keycodes = { 10,  11,  12,  13,  52,  53,  54,  55,  59,  60,  61}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag(keys, s, layouts[1])
@@ -299,15 +299,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
-
-    awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run({ prompt = "Run Lua code: " },
-                  mypromptbox[mouse.screen].widget,
-                  awful.util.eval, nil,
-                  awful.util.getdir("cache") .. "/history_eval")
-              end)
+    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end)
 )
 
 clientkeys = awful.util.table.join(
@@ -477,4 +469,4 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 awful.util.spawn_with_shell("run_once parcellite parcellite")
 awful.util.spawn_with_shell("run_once anamnesis anamnesis.py --start")
 awful.util.spawn_with_shell("run_once vmtoolsd /usr/bin/vmware-user")
---awful.util.spawn_with_shell("shutter --min_at_startup")
+awful.util.spawn_with_shell("shutter --min_at_startup")
