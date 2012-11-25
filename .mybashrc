@@ -11,8 +11,13 @@ export t_Co=256
 export EDITOR=vim
 
 # java settings
-export JVMSTAT_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+if [ "${_UNAME}" = "Linux" ]; then
+  export JVMSTAT_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+  export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+else
+  export JVMSTAT_JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
+fi
 
 # golang settings
 export GOROOT=$HOME/workspace/go
