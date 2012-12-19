@@ -9,6 +9,7 @@ export CLICOLOR=yes
 #export DYLD_LIBRARY_PATH=/Applications/YourKit_Java_Profiler_9.5.5.app/bin/mac
 export t_Co=256
 export EDITOR=vim
+export TMPDIR=/home/xx/tmp/
 
 # java settings
 export JVMSTAT_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
@@ -105,8 +106,8 @@ tunnel() {
     via=$host
   fi
 
-  echo ssh -L $lport:$host:$port $via
-  ssh -L $lport:$host:$port $via
+  echo ssh -L $lport:$host:$port -f $via -N
+  ssh -L $lport:$host:$port -f $via -N
 }
 function vv() {
   e=${@/:/ +}
@@ -164,11 +165,11 @@ ffd() {
 ff() {
   e=${@//../[a-zA-Z0-9_]*}
   if [ "${_UNAME}" = "Linux" ]; then
-    find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack-grep --follow --nogroup --type-set yacc=.y,go=.go --pager="less -R -X" -r "$e"
+    find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y|thrift)" > .foundfiles
+    ack-grep --follow --nogroup --type-set yacc=.y,go=.go,thrift=.thrift --pager="less -R -X" -r "$e"
   else
     find -E -L . -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack --follow --nogroup --pager="less -R -X" --type-set yacc=.y,go=.g -r "$e"
+    ack --follow --nogroup --pager="less -R -X" --type-set yacc=.y,go=.g,thrift=.thrift -r "$e"
   fi
 
   rm -f .foundfiles
@@ -177,11 +178,11 @@ ff() {
 FF() {
   e=${@//../[a-zA-Z0-9_]*}
   if [ "${_UNAME}" = "Linux" ]; then
-    find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack-grep -i --follow --nogroup --type-set yacc=.y,go=.go --pager="less -R -X" -r "$e"
+    find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y|thrift)" > .foundfiles
+    ack-grep -i --follow --nogroup --type-set yacc=.y,go=.go,thrift=.thrift --pager="less -R -X" -r "$e"
   else
     find -E -L . -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack -i --follow --nogroup --pager="less -R -X" --type-set yacc=.y,go=.g -r "$e"
+    ack -i --follow --nogroup --pager="less -R -X" --type-set yacc=.y,go=.g,thrift=.thrift -r "$e"
   fi
 
   rm -f .foundfiles
@@ -346,6 +347,5 @@ gitrm() {
 }
 
 br() {
-  for k in `git branch | perl -pe s/^..//`; do echo -e `git show --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" $k -- | head -n 1`\\t$k; done | sort	
+  for k in `git branch | perl -pe s/^..//`; do echo -e `git show --pretty=format:"%Cgreen%ci %Cblue%cr%x09%x09%Creset" $k -- | head -n 1` | sed 's/ /:/g' | awk '{printf "%-56s\n", $1}' | sed 's/:/ /g' | sed "s#\$#$k#"; done | sort
 }
-
