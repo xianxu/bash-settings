@@ -145,13 +145,6 @@ alias srm='srm -i'
 alias dir='ls -al'
 alias less='less -MX'
 
-t() {
-  if [ "${_UNAME}" = "Linux" ]; then
-    top
-  else
-    top -ocpu
-  fi
-}
 alias irb='irb --simple-prompt -r irb/completion'
 alias mkpasswd='openssl rand 6 -base64'
 
