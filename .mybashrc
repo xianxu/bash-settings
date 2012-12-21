@@ -109,6 +109,19 @@ tunnel() {
   echo ssh -L $lport:$host:$port -f $via -N
   ssh -L $lport:$host:$port -f $via -N
 }
+
+gkill() {
+  pattern=$1
+  ps auxwww | grep $pattern | grep -v grep
+  echo
+  read -p "Do you want to kill all those processes? Ctrl-C to abort. " yn
+
+  echo
+  echo Killing:
+  ps auxwww | grep $pattern | grep -v grep | sed "s/^[^ ]* *//" | cut -f1 -d" "
+  ps auxwww | grep $pattern | grep -v grep | sed "s/^[^ ]* *//" | cut -f1 -d" " | xargs -n1 kill
+}
+
 function vv() {
   e=${@/:/ +}
   if [ "${_UNAME}" = "Linux" ]; then
