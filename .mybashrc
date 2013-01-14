@@ -9,21 +9,26 @@ export CLICOLOR=yes
 #export DYLD_LIBRARY_PATH=/Applications/YourKit_Java_Profiler_9.5.5.app/bin/mac
 export t_Co=256
 export EDITOR=vim
-export TMPDIR=/home/xx/tmp/
+export TMPDIR=$HOME/tmp/
+export ANDROID_HOME=$HOME/android-sdk-macosx
 
 # java settings
 export JVMSTAT_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
 # golang settings
 export GOROOT=$HOME/workspace/go
 export GOBIN=$GOROOT/bin
 export GOPATH=$HOME/workspace/mygo
-# change those two
-export GOOS=linux
+if [ "${_UNAME}" = "Linux" ]; then
+  export GOOS=linux
+else
+  export GOOS=darwin
+fi
 export GOARCH=amd64
 
-export PATH=$HOME/src/apache-cassandra-1.1.6/bin:$HOME/src/zookeeper-3.4.4/bin:$HOME/.main27/bin:$HOME/.rvm/bin:$JAVA_HOME/bin:$GOPATH/bin:$GOROOT/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
+export PATH=$HOME/android-sdk-macosx/tools:$HOME/android-sdk-macosx/platform-tools:$HOME/src/apache-cassandra-1.1.6/bin:$HOME/src/zookeeper-3.4.4/bin:$HOME/.main27/bin:$HOME/.rvm/bin:$JAVA_HOME/bin:$GOPATH/bin:$GOROOT/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
 
 # dealing with git and hg, mostly set good PS1
 source ~/.git-completion.bash
@@ -346,9 +351,6 @@ scalatags() {
 jvmtags() {
   ctags -R --languages=Scala,MyJava --exclude=test *
 }
-gotags() {
-  ctags -R --languages=MyGo --exclude=*test.go *
-}
 
 gitrm() {
   git branch -D $1
@@ -357,4 +359,8 @@ gitrm() {
 
 br() {
   for k in `git branch | perl -pe s/^..//`; do echo -e `git show --pretty=format:"%Cgreen%ci %Cblue%cr%x09%x09%Creset" $k -- | head -n 1` | sed 's/ /:/g' | awk '{printf "%-56s\n", $1}' | sed 's/:/ /g' | sed "s#\$#$k#"; done | sort
+}
+
+st() {
+  git status
 }
