@@ -76,8 +76,8 @@ layouts =
 -- Define a tag table which hold all screen tags.
 tags = {}
 -- Define tag names and keycode to switch to those tags
-keys     = { "1", "2", "3", "4", "z", "x", "c", "v", ",", ".", "/"}
-keycodes = { 10,  11,  12,  13,  52,  53,  54,  55,  59,  60,  61}
+keys     = { "'", "1", "2", "3", "4", "5", "6", ",", ".", "/"}
+keycodes = { 49,  10,  11,  12,  13,  14,  15,  59,  60,  61}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag(keys, s, layouts[1])

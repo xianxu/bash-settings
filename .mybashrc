@@ -9,6 +9,8 @@ export CLICOLOR=yes
 #export DYLD_LIBRARY_PATH=/Applications/YourKit_Java_Profiler_9.5.5.app/bin/mac
 export t_Co=256
 export EDITOR=vim
+export TMPDIR=$HOME/tmp/
+export ANDROID_HOME=$HOME/android-sdk-macosx
 
 # java settings
 if [ "${_UNAME}" = "Linux" ]; then
@@ -18,16 +20,20 @@ else
   export JVMSTAT_JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
 fi
+export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
 # golang settings
 export GOROOT=$HOME/workspace/go
 export GOBIN=$GOROOT/bin
 export GOPATH=$HOME/workspace/mygo
-# change those two
-export GOOS=linux
+if [ "${_UNAME}" = "Linux" ]; then
+  export GOOS=linux
+else
+  export GOOS=darwin
+fi
 export GOARCH=amd64
 
-export PATH=$HOME/src/apache-cassandra-1.1.6/bin:$HOME/src/zookeeper-3.4.4/bin:$HOME/.main27/bin:$HOME/.rvm/bin:$JAVA_HOME/bin:$GOPATH/bin:$GOROOT/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
+export PATH=$HOME/android-sdk-macosx/tools:$HOME/android-sdk-macosx/platform-tools:$HOME/src/apache-cassandra-1.1.6/bin:$HOME/src/zookeeper-3.4.4/bin:$HOME/.main27/bin:$HOME/.rvm/bin:$JAVA_HOME/bin:$GOPATH/bin:$GOROOT/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$PATH
 
 # dealing with git and hg, mostly set good PS1
 source ~/.git-completion.bash
@@ -110,9 +116,22 @@ tunnel() {
     via=$host
   fi
 
-  echo ssh -L $lport:$host:$port $via
-  ssh -L $lport:$host:$port $via
+  echo ssh -L $lport:$host:$port -f $via -N
+  ssh -L $lport:$host:$port -f $via -N
 }
+
+gkill() {
+  pattern=$1
+  ps auxwww | grep $pattern | grep -v grep
+  echo
+  read -p "Do you want to kill all those processes? Ctrl-C to abort. " yn
+
+  echo
+  echo Killing:
+  ps auxwww | grep $pattern | grep -v grep | sed "s/^[^ ]* *//" | cut -f1 -d" "
+  ps auxwww | grep $pattern | grep -v grep | sed "s/^[^ ]* *//" | cut -f1 -d" " | xargs -n1 kill
+}
+
 function vv() {
   e=${@/:/ +}
   if [ "${_UNAME}" = "Linux" ]; then
@@ -149,13 +168,6 @@ alias srm='srm -i'
 alias dir='ls -al'
 alias less='less -MX'
 
-t() {
-  if [ "${_UNAME}" = "Linux" ]; then
-    top
-  else
-    top -ocpu
-  fi
-}
 alias irb='irb --simple-prompt -r irb/completion'
 alias mkpasswd='openssl rand 6 -base64'
 
@@ -169,11 +181,11 @@ ffd() {
 ff() {
   e=${@//../[a-zA-Z0-9_]*}
   if [ "${_UNAME}" = "Linux" ]; then
-    find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack-grep --follow --nogroup --type-set yacc=.y,go=.go --pager="less -R -X" -r "$e"
+    find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y|thrift)" > .foundfiles
+    ack-grep --follow --nogroup --type-set yacc=.y,go=.go,thrift=.thrift --pager="less -R -X" -r "$e"
   else
     find -E -L . -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack --follow --nogroup --pager="less -R -X" --type-set yacc=.y,go=.g -r "$e"
+    ack --follow --nogroup --pager="less -R -X" --type-set yacc=.y,go=.g,thrift=.thrift -r "$e"
   fi
 
   rm -f .foundfiles
@@ -182,11 +194,11 @@ ff() {
 FF() {
   e=${@//../[a-zA-Z0-9_]*}
   if [ "${_UNAME}" = "Linux" ]; then
-    find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack-grep -i --follow --nogroup --type-set yacc=.y,go=.go --pager="less -R -X" -r "$e"
+    find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y|thrift)" > .foundfiles
+    ack-grep -i --follow --nogroup --type-set yacc=.y,go=.go,thrift=.thrift --pager="less -R -X" -r "$e"
   else
     find -E -L . -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack -i --follow --nogroup --pager="less -R -X" --type-set yacc=.y,go=.g -r "$e"
+    ack -i --follow --nogroup --pager="less -R -X" --type-set yacc=.y,go=.g,thrift=.thrift -r "$e"
   fi
 
   rm -f .foundfiles
@@ -299,39 +311,42 @@ scalatags() {
   ctags -R --languages=scala --exclude=test *
 }
 
-# Check to see if SSH Agent is already running
-agent_pid="$(ps -ef | grep "ssh-agent" | grep -v "grep" | awk '{print($2)}')"
+if [ "${_UNAME}" = "Linux" ]; then
+  # Check to see if SSH Agent is already running
+  # Only need this on linux, mac seems to working fine.
+  agent_pid="$(ps -ef | grep "ssh-agent" | grep -v "grep" | awk '{print($2)}')"
 
-# If the agent is not running (pid is zero length string)
-if [[ -z "$agent_pid" ]]; then
-  # Start up SSH Agent
+  # If the agent is not running (pid is zero length string)
+  if [[ -z "$agent_pid" ]]; then
+    # Start up SSH Agent
 
-  # this seems to be the proper method as opposed to `exec ssh-agent bash`
-  eval "$(ssh-agent)"
+    # this seems to be the proper method as opposed to `exec ssh-agent bash`
+    eval "$(ssh-agent)"
 
-  # if you have a passphrase on your key file you may or may
-  # not want to add it when logging in, so comment this out
-  # if asking for the passphrase annoys you
-  ssh-add
+    # if you have a passphrase on your key file you may or may
+    # not want to add it when logging in, so comment this out
+    # if asking for the passphrase annoys you
+    ssh-add
 
-# If the agent is running (pid is non zero)
-else
-  # Connect to the currently running ssh-agent
+  # If the agent is running (pid is non zero)
+  else
+    # Connect to the currently running ssh-agent
 
-  # this doesn't work because for some reason the ppid is 1 both when
-  # starting from ~/.profile and when executing as `ssh-agent bash`
-  agent_ppid="$(ps -ef | grep "ssh-agent" | grep -v "grep" | awk '{print($3)}')"
-  #agent_ppid="$(($agent_pid - 1))"
+    # this doesn't work because for some reason the ppid is 1 both when
+    # starting from ~/.profile and when executing as `ssh-agent bash`
+    agent_ppid="$(ps -ef | grep "ssh-agent" | grep -v "grep" | awk '{print($3)}')"
+    #agent_ppid="$(($agent_pid - 1))"
 
-  # and the actual auth socket file name is simply numerically one less than
-  # the actual process id, regardless of what `ps -ef` reports as the ppid
-  agent_sock="$(find /tmp -path "*ssh*" -type s -iname "agent.$agent_ppid" 2>/dev/null)"
+    # and the actual auth socket file name is simply numerically one less than
+    # the actual process id, regardless of what `ps -ef` reports as the ppid
+    agent_sock="$(find /tmp -path "*ssh*" -type s -iname "agent.$agent_ppid" 2>/dev/null)"
 
-  echo "Agent pid $agent_pid"
-  export SSH_AGENT_PID="$agent_pid"
+    echo "Agent pid $agent_pid"
+    export SSH_AGENT_PID="$agent_pid"
 
-  echo "Agent sock $agent_sock"
-  export SSH_AUTH_SOCK="$agent_sock"
+    echo "Agent sock $agent_sock"
+    export SSH_AUTH_SOCK="$agent_sock"
+  fi
 fi
 
 scalatags() {
@@ -341,11 +356,16 @@ scalatags() {
 jvmtags() {
   ctags -R --languages=Scala,MyJava --exclude=test *
 }
-gotags() {
-  ctags -R --languages=MyGo --exclude=*test.go *
-}
 
 gitrm() {
   git branch -D $1
   git push origin :$1
+}
+
+br() {
+  for k in `git branch | perl -pe s/^..//`; do echo -e `git show --pretty=format:"%Cgreen%ci %Cblue%cr%x09%x09%Creset" $k -- | head -n 1` | sed 's/ /:/g' | awk '{printf "%-56s\n", $1}' | sed 's/:/ /g' | sed "s#\$#$k#"; done | sort
+}
+
+st() {
+  git status
 }
