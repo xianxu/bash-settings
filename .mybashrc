@@ -133,20 +133,18 @@ gkill() {
 }
 
 function vv() {
-  e=${@/:/ +}
   if [ "${_UNAME}" = "Linux" ]; then
-    vim -R $e
+    vim -R $@
   else
-    /Applications/MacVim.app/Contents/MacOS/Vim -R -c "set number" "$e"
+    /Applications/MacVim.app/Contents/MacOS/Vim -R $@
   fi
 }
 
 function v() {
-  e=${@/:/ +}
   if [ "${_UNAME}" = "Linux" ]; then
-    vim $e
+    vim $@
   else
-    /Applications/MacVim.app/Contents/MacOS/Vim -c "set number" "$e"
+    /Applications/MacVim.app/Contents/MacOS/Vim $@
   fi
 }
 
