@@ -13,8 +13,13 @@ export TMPDIR=$HOME/tmp/
 export ANDROID_HOME=$HOME/android-sdk-macosx
 
 # java settings
-export JVMSTAT_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+if [ "${_UNAME}" = "Linux" ]; then
+  export JVMSTAT_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+  export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+else
+  export JVMSTAT_JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
+fi
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
 # golang settings
@@ -128,20 +133,18 @@ gkill() {
 }
 
 function vv() {
-  e=${@/:/ +}
   if [ "${_UNAME}" = "Linux" ]; then
-    vim -R $e
+    vim -R $@
   else
-    /Applications/MacVim.app/Contents/MacOS/Vim -R -c "set number" "$e"
+    /Applications/MacVim.app/Contents/MacOS/Vim -R $@
   fi
 }
 
 function v() {
-  e=${@/:/ +}
   if [ "${_UNAME}" = "Linux" ]; then
-    vim $e
+    vim $@
   else
-    /Applications/MacVim.app/Contents/MacOS/Vim -c "set number" "$e"
+    /Applications/MacVim.app/Contents/MacOS/Vim $@
   fi
 }
 
