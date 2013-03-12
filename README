@@ -26,3 +26,14 @@ And a very good clipboard manager:
 
 Very good note taking software inspired by Notational Velocity
   https://github.com/cpbotha/nvpy
+
+Setting up tmux remote: http://jjasonclark.com/Remote-Pairing-with-SSH-and-Tmux-on-a-Mac
+  - set up account for remote
+  - enable ssh log in for that account in preference Sharing
+  - add the following to the end of /etc/sshd_config
+    Match User remotepair
+        X11Forwarding no
+	AllowTcpForwarding no
+	ForceCommand /usr/local/bin/tmux -S /tmp/pair attach -t workenv
+  - setting up the shared Tmux session, the two ~/bin file: remotepair and pair
+  - profit!

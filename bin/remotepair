@@ -1,0 +1,11 @@
+#! /bin/sh
+
+if [ "enable" = "$1" ]; then
+    echo Enabling remote pair
+    chmod 777 /tmp/pair
+    sudo dscl . -create /Users/remote UserShell /bin/bash
+else
+    echo Disabling remote pair
+    chmod 770 /tmp/pair
+    sudo dscl . -create /Users/remote UserShell /usr/bin/false
+fi

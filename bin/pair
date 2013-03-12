@@ -1,0 +1,7 @@
+#!/bin/sh
+
+tmux -CC -S /tmp/pair has-session -t workenv
+if [[ $? == 1 ]] ; then
+    tmux -S /tmp/pair new-session -d -s workenv -n SHARED
+fi
+tmux -CC -S /tmp/pair -2 attach -t workenv
