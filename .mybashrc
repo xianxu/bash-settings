@@ -362,6 +362,14 @@ gitrm() {
   git push origin :$1
 }
 
+gn(){
+  git notes show
+}
+
+ga() {
+  git notes add -f -m "$*"
+}
+
 br() {
   for k in `git branch | perl -pe s/^..//`; do echo -e `git show --pretty=format:"%Cgreen%ci %Cblue%cr%x09%x09%Creset" $k -- | head -n 1` | sed 's/ /:/g' | awk '{printf "%-56s\n", $1}' | sed 's/:/ /g' | sed "s#\$#$k#"; done | sort
 }
