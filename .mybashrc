@@ -2,7 +2,13 @@ umask 0007
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-HISTFILESIZE=10000
+HISTFILESIZE=100000
+# avoid duplicates..
+export HISTCONTROL=ignoredups:erasedups  
+# append history entries..
+shopt -s histappend
+# After each command, save and reload history
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 export _UNAME=`uname`
 # terminal settings
@@ -19,8 +25,8 @@ if [ "${_UNAME}" = "Linux" ]; then
   export JVMSTAT_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
   export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 else
-  export JVMSTAT_JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home
+  export JVMSTAT_JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_21.jdk/Contents/Home
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_21.jdk/Contents/Home
 fi
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
