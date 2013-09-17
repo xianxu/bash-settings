@@ -31,17 +31,9 @@ fi
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
 # golang settings
-#export GOROOT=$HOME/workspace/go
-#export GOBIN=$GOROOT/bin
-#export GOPATH=$HOME/workspace/mygo
-#if [ "${_UNAME}" = "Linux" ]; then
-#  export GOOS=linux
-#else
-#  export GOOS=darwin
-#fi
-#export GOARCH=amd64
+export GOPATH=$HOME/workspace/mygo
 
-export PATH=$HOME/src/bin:$HOME/android-sdk-macosx/tools:$HOME/android-sdk-macosx/platform-tools:$HOME/src/apache-cassandra-1.1.6/bin:$HOME/src/zookeeper-3.4.4/bin:$HOME/.main27/bin:$HOME/.rvm/bin:$JAVA_HOME/bin:$GOPATH/bin:$GOROOT/bin:/usr/local/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$HOME/workspace/play-2.1.3:$PATH
+export PATH=$HOME/bin:$HOME/src/bin:$HOME/workspace/go/bin:$HOME/workspace/mygo/bin:$HOME/android-sdk-macosx/tools:$HOME/android-sdk-macosx/platform-tools:/usr/local/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$HOME/workspace/play-2.1.3:$PATH
 
 # dealing with git and hg, mostly set good PS1
 source ~/.git-completion.bash
