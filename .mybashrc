@@ -172,11 +172,7 @@ alias mkpasswd='openssl rand 6 -base64'
 alias pjson='python -mjson.tool'
 
 # source search
-ffd() {
-  ff "(module|class|trait|object|def|val|var|type|def self\.)[ \t]+$1"
-}
-
-ff() {
+f2() {
   e=${@//../[a-zA-Z0-9_]*}
   if [ "${_UNAME}" = "Linux" ]; then
     find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y|thrift)" > .foundfiles
@@ -189,21 +185,32 @@ ff() {
   rm -f .foundfiles
 }
 
-FF() {
-  e=${@//../[a-zA-Z0-9_]*}
-  if [ "${_UNAME}" = "Linux" ]; then
-    find -L . -regextype posix-extended -regex ".*$e.*\.(java|scala|rb|py|go|c|y|thrift)" > .foundfiles
-    ack-grep -i --follow --nogroup --type-set yacc=.y,go=.go,thrift=.thrift --pager="less -R -X" -r "$e"
-  else
-    find -E -L . -regex ".*$e.*\.(java|scala|rb|py|go|c|y)" > .foundfiles
-    ack -i --follow --nogroup --pager="less -R -X" --type-set yacc=.y,go=.g,thrift=.thrift -r "$e"
-  fi
+f2d() {
+  f2 "(module|class|trait|object|def|val|var|type|def self\.)[ \t]+$1"
+}
 
-  rm -f .foundfiles
+f1() {
+  git grep --color=always -n -E "$*"
+}
+
+f1d() {
+  git grep --color=always -n -E "(public|private|protected|module|class|trait|object|def|val|var|type|def self\.)[ \t]+$*"
 }
 
 f() {
-  git grep --color=always -n -E "$*"
+  if [ "$(__git_ps1)" != "" ]; then
+    f1 $*
+  else
+    f2 $*
+  fi
+}
+
+fd() {
+  if [ "$(__git_ps1)" != "" ]; then
+    f1d $*
+  else
+    f2d $*
+  fi
 }
 
 g() {
@@ -224,34 +231,6 @@ j() {
 
 g-() {
   GREP_COLOR='1;32' grep --color=always -v "$*" | less -R
-}
-
-F() {
-  git grep --color=always -n -E -i "$*"
-}
-
-G() {
-  GREP_COLOR='1;32' grep --color=always -i "$*" | less -R
-}
-
-H() {
-  GREP_COLOR='1;33' grep --color=always -i "$*" | less -R
-}
-
-I() {
-  GREP_COLOR='1;34' grep --color=always -i "$*" | less -R
-}
-
-J() {
-  GREP_COLOR='1;35' grep --color=always -i "$*" | less -R
-}
-
-G-() {
-  GREP_COLOR='1;32' grep --color=always -v -i "$*" | less -R
-}
-
-fd() {
-  git grep --color=always -n -E "(public|private|protected|module|class|trait|object|def|val|var|type|def self\.)[ \t]+$*"
 }
 
 # ramdisk
