@@ -8,7 +8,7 @@ export HISTCONTROL=ignoredups:erasedups
 # append history entries..
 shopt -s histappend
 # After each command, save and reload history
-export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+# export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 export _UNAME=`uname`
 # terminal settings
@@ -33,7 +33,7 @@ export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 # golang settings
 export GOPATH=$HOME/workspace/mygo
 
-export PATH=$HOME/bin:$HOME/src/bin:$HOME/workspace/go/bin:$HOME/workspace/mygo/bin:$HOME/android-sdk-macosx/tools:$HOME/android-sdk-macosx/platform-tools:/usr/local/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$HOME/workspace/play-2.1.3:$PATH
+export PATH=$HOME/bin:$HOME/src/bin:$HOME/workspace/go/bin:$HOME/workspace/mygo/bin:$HOME/android-sdk-macosx/tools:$HOME/android-sdk-macosx/platform-tools:/usr/local/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$HOME/workspace/play-2.1.3:$HOME/workspace/src/storm-0.9.0-wip21/bin:$PATH
 
 # dealing with git and hg, mostly set good PS1
 source ~/.git-completion.bash
@@ -369,4 +369,16 @@ gitrm() {
     git branch -D $b
     git push origin :$b
   done
+}
+
+idea() {
+  name=$1
+  shift
+  rest=$@
+  echo creating project named $name for the $rest
+  #find $rest -name BUILD | sed "s#BUILD#:#"
+  builds=`find $rest -name BUILD | sed "s#BUILD#::#"`
+  echo will include the following targets:
+  echo $builds
+  ./pants goal idea --idea-java-language-level=7 --idea-project-name=$name -- $builds
 }
