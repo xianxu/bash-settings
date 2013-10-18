@@ -1,0 +1,103 @@
+
+export NEST1=nest1.corp.twitter.com
+export NEST2=nest2.corp.twitter.com
+export HEST1=hadoopnest1.smf1.twitter.com
+export HEST2=hadoopnest2.smf1.twitter.com
+export SMF1_SCHDL=smf1-aey-11-sr2.prod.twitter.com
+export ATLA_SCHDL=atla-agt-29-sr3.prod.twttr.net
+export FETCHER=smf1-awz-17-sr1.prod.twitter.com
+
+hest1() {
+  ssh $HEST1
+}
+
+hest2() {
+  ssh $HEST2
+}
+
+nest1() {
+  ssh $NEST1
+}
+
+nest2() {
+  ssh $NEST2
+}
+
+spidernest1() {
+  ssh spiderduck@$NEST1
+}
+
+spidernest2() {
+  ssh spiderduck@$NEST2
+}
+
+searchnest1() {
+  ssh search@$NEST1
+}
+
+searchnest2() {
+  ssh search@$NEST2
+}
+
+# List changes between spiderduck_deploy and spiderduck_release, on spiderduck paths.
+spchange() {
+  git log spiderduck_deploy..spiderduck_release -- src/java/com/twitter/spiderduck src/scala/com/twitter/spiderduck src/python/com/twitter/spiderduck src/thrift/com/twitter/service/spiderduck/gen src/resources/com/twitter/spiderduck spiderduck
+}
+ 
+spchange_release_master() {
+  git log spiderduck_release..master -- src/java/com/twitter/spiderduck src/scala/com/twitter/spiderduck src/python/com/twitter/spiderduck src/thrift/com/twitter/service/spiderduck/gen src/resources/com/twitter/spiderduck spiderduck
+}
+ 
+# Prepare spiderduck_release branch for deploy.
+sp_prepare_deploy() {
+  git co master; git pull; git co spiderduck_deploy; git merge spiderduck_release; git push origin spiderduck_deploy; git co spiderduck_release; git merge master; git push origin spiderduck_release
+  spchange
+  echo
+  echo Please remember to update deploy history at:
+  echo
+  echo     http://confluence.smf1.twitter.com/display/Discovery/Spiderduck+Deploy+History
+  echo
+  echo Please check the following URL for latest build:
+  echo
+  echo     http://jvm-ci.twitter.biz/view/Science/job/science-spiderduck-release
+  echo
+  echo And then cake!
+}
+
+check_fetcher() {
+  ssh $NEST1 "echo YES | loony -D $1 -g role:spiderduck.fetcher run \"curl -Ssm1 $2 | head -n1\""
+}
+
+pink_prepare_deploy() {
+  d=`date +"%y-%m-%d-%H-%M"`
+  b="pink-release_$d"
+  git co master
+  git pull
+  git co pink-release
+  git merge master
+  git push origin pink-release
+  git co -b $b
+  git push origin $b
+  git co pink-release
+
+  echo "Done let's cake!"
+}
+
+alias uberjar='./pants goal binary -vx --binary-deployjar'
+alias freshjar='./pants goal invalidate binary -vx --binary-deployjar'
+
+idea-clusterduck() {
+  ./pants goal clean-all idea tests/java/com/twitter/clusterduck/BUILD:all --idea-java-language-level=7 --compile-javac-args='-source 7 -target 7' --idea-project-name=clusterduck
+}
+
+idea-trends() {
+  ./pants goal idea --idea-java-language-level=7 --compile-javac-args='-source 7 -target 7' --idea-project-name=trends src/java/com/twitter/trends/::
+}
+
+idea-roastduck() {
+  ./pants goal idea sandbox/users/xx/roastduck/ --idea-java-language-level=7 --compile-javac-args="-source 7 -target 7" --idea-project-name=roastduck
+}
+
+pig() {
+  ssh smf1-ayn-08-sr3.prod.twitter.com
+}
