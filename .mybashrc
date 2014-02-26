@@ -27,8 +27,8 @@ if [ "${_UNAME}" = "Linux" ]; then
   export JVMSTAT_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
   export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 else
-  export JVMSTAT_JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
+  export JVMSTAT_JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home
 fi
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
@@ -198,7 +198,7 @@ f1() {
 }
 
 f1d() {
-  git grep --color=always -n -E "(public|private|protected|module|class|trait|object|def|val|var|type|def self\.)[ \t]+$*"
+  git grep --color=always -n -E "(interface|public|private|protected|module|class|trait|object|def|val|var|type|def self\.)[ \t]+$*"
 }
 
 f() {
@@ -389,4 +389,18 @@ idea() {
 
 D() {
   git diff master $@
+}
+
+gs() {
+  git status
+}
+
+gdm() {
+  git diff --name-only master
+}
+
+export DOCKER_PORT=6666
+
+ldocker() {
+  docker -H=tcp://localhost:6666 $@
 }
