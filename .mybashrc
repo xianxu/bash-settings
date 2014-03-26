@@ -37,7 +37,10 @@ export GOPATH=$HOME/workspace/mygo
 export GOROOT=$HOME/workspace/go
 export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
-export PATH=/usr/local/opt/ruby193/bin:$HOME/bin:$HOME/src/bin:$HOME/android-sdk-macosx/tools:$HOME/android-sdk-macosx/platform-tools:/usr/local/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$HOME/workspace/play-2.1.3:$HOME/workspace/src/storm-0.9.0-wip21/bin:$PATH
+export PLAN9=/Users/xx/workspace/plan9port
+export PATH=$PATH:$PLAN9/bin
+
+export PATH=~/.gem/bin:/usr/local/Cellar/objective-caml/4.01.0/bin:$HOME/.cabal/bin:/usr/local/opt/ruby193/bin:$HOME/bin:$HOME/src/bin:$HOME/android-sdk-macosx/tools:$HOME/android-sdk-macosx/platform-tools:/usr/local/bin:~/bin:/opt/local/bin:/usr/local/mysql/bin:$HOME/workspace/play-2.1.3:$HOME/workspace/src/storm-0.9.0-wip21/bin:$PATH
 
 # dealing with git and hg, mostly set good PS1
 source ~/.git-completion.bash
@@ -152,6 +155,10 @@ function v() {
   fi
 }
 
+function e() {
+  emacs $@
+}
+
 alias http='python -m SimpleHTTPServer'
 alias l='ls -lrt'
 
@@ -198,7 +205,7 @@ f1() {
 }
 
 f1d() {
-  git grep --color=always -n -E "(interface|public|private|protected|module|class|trait|object|def|val|var|type|def self\.)[ \t]+$*"
+  git grep --color=always -n -E "(interface|public|private|protected|module|class|trait|object|def|val|var|type|let|def self\.)[ \t]+$*"
 }
 
 f() {
@@ -207,6 +214,10 @@ f() {
   else
     f2 $*
   fi
+}
+
+fn() {
+  find . -name $*
 }
 
 fd() {
@@ -404,3 +415,37 @@ export DOCKER_PORT=6666
 ldocker() {
   docker -H=tcp://localhost:6666 $@
 }
+
+fr() {
+  java -jar $FREGE_JAR $@
+}
+
+export FREGE_JAR=$HOME/workspace/jvms/frege3.21.313-ge2fdeea.jar
+
+frm() {
+  java -jar $FREGE_JAR $@
+  java -cp .:$FREGE_JAR Main
+}
+
+oc() {
+  ocamljava $@
+}
+
+irssi_awl() {
+  perl $HOME/.irssi/scripts/autorun/adv_windowlist.pl
+}
+
+eval `opam config env`
+
+ctrlp_clear() {
+  find . -name .cp | xargs -n1 rm -fr
+}
+
+ctrlp_roastduck() {
+  touch ~/workspace/science/src/scala/com/twitter/roastduck/.cp
+  touch ~/workspace/science/tests/scala/com/twitter/roastduck/.cp
+  touch ~/workspace/science/roastduck/.cp
+}
+
+# Testing out stuff with acme, seems extremely powerful:
+alias acme='acme -f ~/workspace/plan9port/font/pelm/euro.9.font'
