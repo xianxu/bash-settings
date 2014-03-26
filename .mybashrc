@@ -217,7 +217,9 @@ f() {
 }
 
 fn() {
-  find . -name $*
+  directory=$1
+  shift
+  find $directory -name "$@"
 }
 
 fd() {
