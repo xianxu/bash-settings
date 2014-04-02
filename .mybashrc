@@ -455,3 +455,6 @@ alias acme='acme -f ~/workspace/plan9port/font/pelm/euro.9.font'
 
 # Generate a .cp file to serve as vim ctrl roots
 alias d='touch .cp'
+alias ud='rm -fr .cp'
+
+
