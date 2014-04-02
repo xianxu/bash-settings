@@ -408,8 +408,9 @@ gs() {
   git status
 }
 
-gdm() {
-  git diff --name-only master
+gd() {
+  branch=${1:-master}
+  git diff --name-only $branch
 }
 
 export DOCKER_PORT=6666
@@ -451,3 +452,6 @@ ctrlp_roastduck() {
 
 # Testing out stuff with acme, seems extremely powerful:
 alias acme='acme -f ~/workspace/plan9port/font/pelm/euro.9.font'
+
+# Generate a .cp file to serve as vim ctrl roots
+alias d='touch .cp'
