@@ -3,3 +3,4 @@
 #urlbar-container { max-width: 500px !important; }
 #urlbar-container { min-width: 500px !important; }
 #urlbar {font-size: 11pt !important}
+#nav-bar { display: none !important; }
