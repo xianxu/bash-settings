@@ -413,6 +413,11 @@ gd() {
   git diff --name-only $branch
 }
 
+GD() {
+  branch=${1:-master}
+  git diff $branch
+}
+
 export DOCKER_PORT=6666
 
 ldocker() {
