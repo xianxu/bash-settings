@@ -305,8 +305,9 @@ scalatags() {
   ctags -R --languages=scala --exclude=test *
 }
 
-# Check to see if SSH Agent is already running
-# Only need this on linux, mac seems to working fine.
+# Check to see if SSH Agent is already running, if it's not running, we
+# need to start up ssh-agent. If it is already running, we need set some
+# envs.
 agent_pid="$(ps -ef | grep "ssh-agent" | grep -v "grep" | awk '{print($2)}')"
 
 # If the agent is not running (pid is zero length string)
@@ -314,35 +315,21 @@ if [[ -z "$agent_pid" ]]; then
   # Start up SSH Agent
 
   # this seems to be the proper method as opposed to `exec ssh-agent bash`
-  eval "$(ssh-agent)"
+  ssh-agent > ~/.ssh/envs
+  source ~/.ssh/envs
 
   # if you have a passphrase on your key file you may or may
   # not want to add it when logging in, so comment this out
   # if asking for the passphrase annoys you
   if [ "${_UNAME}" = "Linux" ]; then
-    ssh-add
+    echo ssh-add
   elif [ "${_UNAME}" = "Darwin" ]; then
     ssh-add -A
   fi
 
 # If the agent is running (pid is non zero)
 else
-  # Connect to the currently running ssh-agent
-
-  # this doesn't work because for some reason the ppid is 1 both when
-  # starting from ~/.profile and when executing as `ssh-agent bash`
-  agent_ppid="$(ps -ef | grep "ssh-agent" | grep -v "grep" | awk '{print($3)}')"
-  #agent_ppid="$(($agent_pid - 1))"
-
-  # and the actual auth socket file name is simply numerically one less than
-  # the actual process id, regardless of what `ps -ef` reports as the ppid
-  agent_sock="$(find /tmp -path "*ssh*" -type s -iname "agent.$agent_ppid" 2>/dev/null)"
-
-  echo "Agent pid $agent_pid"
-  export SSH_AGENT_PID="$agent_pid"
-
-  echo "Agent sock $agent_sock"
-  export SSH_AUTH_SOCK="$agent_sock"
+  source ~/.ssh/envs
 fi
 
 scalatags() {
@@ -488,3 +475,18 @@ preexec() {
     #echo DISPLAY = $DISPLAY, display.txt = `cat ~/.display.txt`, STY = $STY, TMUX = $TMUX
 }
 trap 'preexec' DEBUG
+
+# Renew Environment Variables in tmux (for bash)
+# see also https://babushk.in/posts/renew-environment-tmux.html
+# for another solution for zsh
+if [ -n "$TMUX" ]; then
+  function refresh {
+    eval $(tmux showenv -s DISPLAY)
+    eval $(tmux showenv -s SSH_AUTH_SOCK)
+  }
+else
+  function refresh {
+    true
+  }
+fi
+
