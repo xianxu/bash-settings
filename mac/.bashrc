@@ -1,0 +1,2 @@
+source ~/.mybashrc
+source ~/.wabashrc
